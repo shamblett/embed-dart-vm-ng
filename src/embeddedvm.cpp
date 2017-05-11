@@ -5,11 +5,12 @@
  *      Author: stevehamblett
  */
 
+#include <cstdio>
 #include <unistd.h>
 #include <sys/param.h>
 
-#include "embedded_dart_io.h"
 #include "dart_api.h"
+#include "embedded_dart_io.h"
 
 #include "embeddedvm.h"
 

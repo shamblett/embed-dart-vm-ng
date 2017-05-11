@@ -4,8 +4,7 @@
  *  Created on: May 10, 2017
  *      Author: stevehamblett
  */
-
-#include <iostream>
+#include <string>
 
 #ifndef SRC_EMBEDDEDVM_H_
 #define SRC_EMBEDDEDVM_H_

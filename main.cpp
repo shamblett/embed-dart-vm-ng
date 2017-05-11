@@ -5,6 +5,7 @@
  *      Author: stevehamblett
  */
 #include <iostream>
+
 #include "src/embeddedvm.h"
 
 /**
