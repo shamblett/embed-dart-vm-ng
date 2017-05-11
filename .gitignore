@@ -28,12 +28,3 @@
 *.out
 *.app
 
-# Bazel
-bazel*
-
-# CMake
-CMakeFiles
-CMakeCache.txt
-CMakeScripts
-Makefile
-cmake_install.cmake
