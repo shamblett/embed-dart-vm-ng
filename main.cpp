@@ -21,6 +21,16 @@ int main(int argc, const char** argv) {
 	}
 	std::string script(argv[1]);
 	std::cout << "Hello from the Dart Embedded VM test, running script " << script << std::endl;
+
+	EmbeddedVM vm(script);
+
+	// Initialize the VM
+	int ret = vm.initializeVM();
+	if ( ret != 0 ) {
+		std::cout << "Failed to initialize the VM - exiting" << std::endl;
+		return -1;
+	}
+
 	return 0;
 }
 
