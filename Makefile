@@ -5,16 +5,18 @@ PRJ_INCLUDE = src
 # Change to your Dart SDK root
 DART_SDK_ROOT = /home/stevehamblett/Development/google/dart/build/dart-sdk/sdk
 DART_BUILD_ROOT ?= $(DART_SDK_ROOT)/out/ReleaseX64/obj
-DART_API_INCLUDE= $(DART_SDK_ROOT)/runtime/include
-DART_BIN_INCLUDE=$(DART_SDK_ROOT)/runtime/bin
+DART_RUNTIME_INCLUDE= $(DART_SDK_ROOT)/runtime
+DART_API_INCLUDE= $(DART_RUNTIME_INCLUDE)/include
+DART_BIN_INCLUDE=$(DART_RUNTIME_INCLUDE)/bin
 DART_API_LIB= $(DART_BUILD_ROOT)/runtime
 DART_BIN_LIB= $(DART_BUILD_ROOT)/runtime/bin
+DART_VM_LIB= $(DART_BUILD_ROOT)/runtime/vm
 LIB_RELEASE=build/lib
 
 #
 CPP = g++
-CPP_FLAGS = -g -pipe -fexceptions -Wno-deprecated -Wall -Wno-sign-compare -std=c++11 -D_REENTRANT -DNDEBUG
-CPP_EXE_FLAGS = $(CPP_FLAGS)
+CPP_FLAGS = -g -pipe -fexceptions -Wno-deprecated -Wall -Wno-sign-compare -std=c++11 
+CPP_EXE_FLAGS = $(CPP_FLAGS) -D_REENTRANT -DNDEBUG -DDISALLOW_ALLOCATION
 #
 LD = g++
 #
@@ -30,12 +32,12 @@ RM = rm -f
 #	Include files
 #
 ################################################################################
-PROJECT_INCLUDES = -I$(DART_API_INCLUDE) \
+PROJECT_INCLUDES = -I$(DART_RUNTIME_INCLUDE) \
+				   -I$(DART_API_INCLUDE) \
 		   		   -I$(DART_BIN_INCLUDE) 
 		  
-INCLUDES = \
-	$(PROJECT_INCLUDES) \
-	-I$(PRJ_INCLUDE)
+INCLUDES = -I$(PRJ_INCLUDE) \
+		     $(PROJECT_INCLUDES) 
 
 ################################################################################
 #
@@ -43,11 +45,13 @@ INCLUDES = \
 #
 ################################################################################
 LIBS_AR = -L$(DART_API_LIB) \
-          -L$(DART_BIN_LIB)
+          -L$(DART_BIN_LIB) \
+          -L$(DART_VM_LIB)
           
 LIBS = $(LIBS_AR)
 
-LIBS_RELEASE = $(LIBS) -L$(LIB_RELEASE) 
+LIBS_RELEASE = $(LIBS) -L$(LIB_RELEASE) \
+               -ldart_builtin -ldart -ldart_platform
 
 ################################################################################
 #
@@ -82,15 +86,15 @@ EXE = embeddedvm
 create:
 	@@mkdir -p $(LIB_RELEASE)
 	
-all: create $(BIN_DIR_RELEASE)/$(EXE)
+all: create $(LIB_RELEASE)/$(EXE)
 
-$(BIN_DIR_RELEASE)/$(EXE): $(RELEASE_OBJ)
+$(LIB_RELEASE)/$(EXE): $(RELEASE_OBJ)
 	@@echo "Linking '$@'..."
-	@@$(LD) $(AR_FLAGS) -o $@ $(LIBS_RELEASE) $(RELEASE_OBJ)
+	$(LD) -o $@ $(LIBS_RELEASE) $(RELEASE_OBJ)
 	@@echo "$@ created"
 
 clean:
 	@@echo "Cleaning ..."
-	@@$(RM) $(BIN_DIR_RELEASE)/$(EXE)
+	@@$(RM) $(LIB_RELEASE)/$(EXE)
 	@@$(RM) $(RELEASE_OBJ)
 

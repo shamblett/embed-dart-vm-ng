@@ -4,7 +4,6 @@
  *  Created on: May 10, 2017
  *      Author: stevehamblett
  */
-#include <string>
 
 #ifndef SRC_EMBEDDEDVM_H_
 #define SRC_EMBEDDEDVM_H_
@@ -17,7 +16,7 @@ class EmbeddedVM {
 public:
 
 	EmbeddedVM();
-	EmbeddedVM(std::string scriptName);
+	EmbeddedVM(const char* scriptName);
 	~EmbeddedVM();
 
 	/**
@@ -27,10 +26,10 @@ public:
 
 private:
 
-	std::string _scriptPath;
+	char* _scriptPath;
 
-   char* const _vm_isolate_snapshot_buffer;
-   char* const _isolate_snapshot_buffer;
+	uint8_t* _vm_isolate_snapshot_buffer;
+	char* const _isolate_snapshot_buffer;
 };
 
 

@@ -5,7 +5,6 @@
  *      Author: stevehamblett
  */
 
-#include <cstdio>
 #include <unistd.h>
 #include <sys/param.h>
 
@@ -15,23 +14,23 @@
 #include "embeddedvm.h"
 
 EmbeddedVM::EmbeddedVM() :
-		_scriptPath(""), _vm_isolate_snapshot_buffer(NULL), _isolate_snapshot_buffer(
+		_scriptPath(NULL), _vm_isolate_snapshot_buffer(NULL), _isolate_snapshot_buffer(
 				NULL) {
 
 }
 
-EmbeddedVM::EmbeddedVM(std::string scriptName) :
+EmbeddedVM::EmbeddedVM(const char* scriptName) :
 		_vm_isolate_snapshot_buffer(NULL), _isolate_snapshot_buffer(NULL) {
-
-	char temp[MAXPATHLEN];
-	_scriptPath = "";
-	char* ret = getcwd(temp, MAXPATHLEN);
-	if (ret == NULL) {
-		std::cout << "EmbeddedVM - failed to get CWD!" << std::endl;
-	} else {
-		std::string cwd(temp);
-		_scriptPath = cwd + scriptName;
-	}
+//	std::string scriptName1(scriptName);
+//	char temp[MAXPATHLEN];
+//	_scriptPath = "";
+//	char* ret = getcwd(temp, MAXPATHLEN);
+//	if (ret == NULL) {
+//		//printf("EmbeddedVM - failed to get CWD\n");
+//	} else {
+//		std::string cwd(temp);
+//		_scriptPath = cwd + scriptName1;
+//	}
 
 }
 
@@ -41,8 +40,8 @@ EmbeddedVM::~EmbeddedVM() {
 
 int EmbeddedVM::initializeVM() {
 
-	if (_scriptPath == "") {
-		std::cout << "Embedded VM, no script path";
+	if (_scriptPath == NULL) {
+		//printf("Embedded VM, no script path\n");
 		return -1;
 	}
 
@@ -56,8 +55,7 @@ int EmbeddedVM::initializeVM() {
 	params.vm_snapshot_data = _vm_isolate_snapshot_buffer;
 	char* error = Dart_Initialize(&params);
 	if (error) {
-		std::cout << "EmbeddedVM - failed to initialize the VM - error is "
-				<< error << std::endl;
+		//printf("EmbeddedVM - failed to initialize the VM - error is %s\n", error);
 	}
 
 	return 0;

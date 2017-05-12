@@ -4,9 +4,10 @@
  *  Created on: May 10, 2017
  *      Author: stevehamblett
  */
-#include <iostream>
+#include <cstdlib>
 
-#include "src/embeddedvm.h"
+
+#include "embeddedvm.h"
 
 /**
  * Main entry point, initializes the VM and runs the supplied script.
@@ -17,18 +18,18 @@
 int main(int argc, const char** argv) {
 
 	if ( argc == 1) {
-		std::cout << "Dart Embedded VM test - please supply a dart script" << std::endl;
+		//printf("Dart Embedded VM test - please supply a dart script\n");
 		return -1;
 	}
-	std::string script(argv[1]);
-	std::cout << "Hello from the Dart Embedded VM test, running script " << script << std::endl;
+	const char* script = argv[1];
+	//printf("Hello from the Dart Embedded VM test, running script %s\n", script);
 
 	EmbeddedVM vm(script);
 
 	// Initialize the VM
 	int ret = vm.initializeVM();
 	if ( ret != 0 ) {
-		std::cout << "Failed to initialize the VM - exiting" << std::endl;
+		//printf("Failed to initialize the VM - exiting\n");
 		return -1;
 	}
 
